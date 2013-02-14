@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>iOS SDK by eTilbudsavis</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/eTilbudsavis/native-ios-eta-sdk">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/eTilbudsavis/native-ios-eta-sdk/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/eTilbudsavis/native-ios-eta-sdk/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>iOS SDK</h1>
+          <p>iOS SDK</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/eTilbudsavis">eTilbudsavis</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>ETA iOS SDK</h1>
+
+<h2>Introduction</h2>
+
+<p>This repository consists of a project, in which the SDK is used for demonstration purposes.<br>
+To get started using the ETA SDK, simply copy ETA.h and ETA.m to your project. Both of these files can be found in the project folder.<br>
+The ETA SDK can be used to easily call the REST API call documented on <a href="https://etilbudsavis.dk/developers/docs/">https://etilbudsavis.dk/developers/docs/</a>.<br>
+In addition the SDK provides a way for you to initialize a UIWebView and load a catalog within it.</p>
+
+<h2>Example Snippets</h2>
+
+<h3>Initialization</h3>
+
+<div class="highlight"><pre><span class="c1">// Using the convenient factory method.</span>
+<span class="n">ETA</span> <span class="o">*</span><span class="n">eta</span> <span class="o">=</span> <span class="p">[</span><span class="n">ETA</span> <span class="nl">etaWithAPIKey:</span><span class="s">@"fewf32f34f34fq34f34f4345"</span> <span class="nl">apiSecret:</span><span class="s">@"3h45gkw34h5gl345uibn"</span><span class="p">];</span>
+
+<span class="c1">// As both the API key and secret are public properties, we can alloc init as well.</span>
+<span class="c1">// All calls to the ETA object before the API key and secret have been set, will be ignored.</span>
+<span class="n">ETA</span> <span class="o">*</span><span class="n">etaOldSchool</span> <span class="o">=</span> <span class="p">[</span><span class="n">ETA</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+<span class="n">etaOldSchool</span><span class="p">.</span><span class="n">apiKey</span> <span class="o">=</span> <span class="s">@"fewf32f34f34fq34f34f4345"</span><span class="p">;</span>
+<span class="n">etaOldSchool</span><span class="p">.</span><span class="n">apiSecret</span> <span class="o">=</span> <span class="s">@"3h45gkw34h5gl345uibn"</span><span class="p">;</span>
+</pre></div>
+
+<h3>Set Location (without geocoding)</h3>
+
+<div class="highlight"><pre><span class="c1">// The code below assumes that a location property exists on self and that it holds a CLLocation object.</span>
+<span class="c1">// It also assumes that an eta property exists, holding an ETA object.</span>
+<span class="kt">float</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">horizontalAccuracy</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">latitude</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">coordinate</span><span class="p">.</span><span class="n">latitude</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">longitude</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">coordinate</span><span class="p">.</span><span class="n">longitude</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">locationDetermined</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSDate</span> <span class="n">date</span><span class="p">]</span> <span class="n">timeIntervalSince1970</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">distance</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span> <span class="c1">// we want results from within 1km</span>
+<span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">eta</span> <span class="nl">setLocationWithAccuracy:</span><span class="n">accuracy</span> <span class="nl">latitude:</span><span class="n">latitude</span> <span class="nl">longitude:</span><span class="n">longitude</span> <span class="nl">locationDetermined:</span><span class="n">locationDetermined</span> <span class="nl">distance:</span><span class="n">distance</span><span class="p">];</span>
+</pre></div>
+
+<h3>Set Location (with geocoding)</h3>
+
+<div class="highlight"><pre><span class="c1">// The code below assumes that a location property exists on self and that it holds a CLLocation object.</span>
+<span class="c1">// It also assumes that an eta property exists, holding an ETA object.</span>
+<span class="c1">// NB: The address parameter is not used a this point, so you'll have to add it</span>
+<span class="c1">//     as an additional parameter if you wish to include it in your calls.</span>
+<span class="n">NSString</span> <span class="o">*</span><span class="n">address</span> <span class="o">=</span> <span class="s">@"Hans Broges Gade 37, Aarhus C, Denmark"</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">horizontalAccuracy</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">latitude</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">coordinate</span><span class="p">.</span><span class="n">latitude</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">longitude</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">coordinate</span><span class="p">.</span><span class="n">longitude</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">locationDetermined</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSDate</span> <span class="n">date</span><span class="p">]</span> <span class="n">timeIntervalSince1970</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">distance</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span> <span class="c1">// we want results from within 1km</span>
+<span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">eta</span> <span class="nl">setGeocodedLocationWithAddress:</span><span class="n">address</span> <span class="nl">latitude:</span><span class="n">latitude</span> <span class="nl">longitude:</span><span class="n">longitude</span> <span class="nl">locationDetermined:</span><span class="n">locationDetermined</span> <span class="nl">distance:</span><span class="n">distance</span><span class="p">];</span>
+</pre></div>
+
+<h3>REST API Call</h3>
+
+<div class="highlight"><pre><span class="c1">// Below is an example of how you can use the ETA iOS SDK to perform REST API calls and react on their results.</span>
+<span class="c1">// In the example we assume that the eta property lazily loads an ETA object elsewhere.</span>
+<span class="c1">// ETARequestType is an enumerated type (see ETA.h).</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span>
+<span class="p">{</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">eta</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+    <span class="n">NSString</span> <span class="o">*</span><span class="n">path</span> <span class="o">=</span> <span class="s">@"/api/v1/offer/list/"</span><span class="p">;</span>
+    <span class="n">ETARequestType</span> <span class="n">type</span> <span class="o">=</span> <span class="n">ETARequestTypeGet</span><span class="p">;</span>
+    <span class="n">NSDictionary</span> <span class="o">*</span> <span class="n">options</span> <span class="o">=</span> <span class="err">@</span><span class="p">{</span> <span class="s">@"type"</span> <span class="o">:</span> <span class="s">@"suggested"</span><span class="p">,</span> <span class="s">@"api_page"</span> <span class="o">:</span> <span class="err">@</span><span class="mi">1</span><span class="p">,</span> <span class="s">@"api_limit"</span> <span class="o">:</span> <span class="err">@</span><span class="mi">25</span> <span class="p">};</span>
+    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">eta</span> <span class="nl">performAPIRequestWithPathString:</span><span class="n">path</span> <span class="nl">requestType:</span><span class="n">type</span> <span class="nl">optionsDictionary:</span><span class="n">options</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">etaRequestSucceededAndReturnedDictionary:</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">dictionary</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"[ETA Delegate] Request succeeded with dictionary: %@"</span><span class="p">,</span> <span class="n">dictionary</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">etaRequestFailedWithError:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">error</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"[ETA Delegate] Request failed with error: %@"</span><span class="p">,</span> <span class="n">error</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<h3>UIWebView ETA Catalog</h3>
+
+<div class="highlight"><pre><span class="c1">// Below is an example of how you can use the ETA iOS SDK to load a UIWebView with an ETA catalog.</span>
+<span class="c1">// ETA events that happen inside of the UIWebView are passed to its delegate as shown in the example.</span>
+<span class="c1">// In the example we assume that the eta property lazily loads an ETA object elsewhere.</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span>
+<span class="p">{</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">eta</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">eta</span> <span class="n">webViewForETA</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">etaWebViewLoaded:</span><span class="p">(</span><span class="n">UIWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"[ETA Delegate] WebView for ETA loaded: %@"</span><span class="p">,</span> <span class="n">webView</span><span class="p">);</span>
+    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">eta</span> <span class="nl">pageflipWithCatalog:</span><span class="s">@"71ffHDg"</span> <span class="nl">page:</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="o">=</span> <span class="n">webView</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">etaWebViewFailedToLoadWithError:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">error</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"[ETA Delegate] An error occured while loading web view: %@"</span><span class="p">,</span> <span class="n">error</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">etaWebView:</span><span class="p">(</span><span class="n">UIWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="nf">triggeredEventWithClass:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">class</span> <span class="nf">type:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">type</span> <span class="nf">dataDictionary:</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">dataDictionary</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"[ETA Delegate] Received event with class: %@, %@, %@"</span><span class="p">,</span> <span class="n">class</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">dataDictionary</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
